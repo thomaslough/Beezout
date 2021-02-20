@@ -44,9 +44,6 @@ public class BeeController : MonoBehaviour
         NoiseIndex.z = Random.value;
 
         mouseIsDown = false;
-
-        //target = transform.position;
-
     }
 
     // Update is called once per frame
@@ -62,12 +59,20 @@ public class BeeController : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 target = hit.point;
+                //target.z = 4f;
+                //target.z -= -3.0f;
+                target.y -= -0.1f;
             }
+
+
+
         }
         else if (Input.GetMouseButtonUp(0))
         {
             mouseIsDown = false;
         }
+
+        //Debug.Log("mouseIsDown" + mouseIsDown);
 
         if (!mouseIsDown)
         {
