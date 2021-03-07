@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Beezout;
 
 /**
  * Lessons:
@@ -26,9 +27,9 @@ public class BeeController : MonoBehaviour
     private Vector3 BasePosition;
     private Vector3 NoiseIndex = new Vector3();
 
-    private bool mouseIsDown;
     private Vector3 target;
 
+    private string beeState = Constants.HOVER_AT_BASE;
 
     // Use this for initialization
     void Start()
@@ -42,48 +43,34 @@ public class BeeController : MonoBehaviour
         NoiseIndex.x = Random.value;
         NoiseIndex.y = Random.value;
         NoiseIndex.z = Random.value;
-
-        mouseIsDown = false;
-
-        //target = transform.position;
-
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            mouseIsDown = true;
-
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                target = hit.point;
-            }
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            mouseIsDown = false;
-        }
-
-        if (!mouseIsDown)
+        if (beeState == Constants.HOVER_AT_BASE)
         {
             Hover();
         }
-        else
+        else if (beeState == Constants.RETURN_TO_BASE)
         {
-            transform.position = Vector3.Lerp(transform.position, target, 0.1f);
-            //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
-            BasePosition = target;
-        }
+            transform.position = Vector3.Lerp(transform.position, BasePosition, 0.1f);
 
+            if (System.Math.Round(transform.position.z, 4) == System.Math.Round(BasePosition.z, 4))
+            {
+                beeState = Constants.HOVER_AT_BASE;
+            }
+            //Debug.Log("return to base tr: " + transform.position.ToString("F4") + " base: " + BasePosition.ToString("F4"));
+        }
+        else if (beeState == Constants.TRACK_TOUCH_POINT)
+        {
+            transform.position = target;
+        }
     }
 
     void Hover()
     {
+
         // 1. ROTATE
         // Rotate the cube by RotateSpeed, multiplied by the fraction of a second that has passed.
         // In other words, we want to rotate by the full amount over 1 second
@@ -104,5 +91,30 @@ public class BeeController : MonoBehaviour
 
         // Increment the NoiseIndex so that we get a new Noise value next time.
         NoiseIndex += WobbleSpeed * Time.deltaTime;
+    }
+
+    public void GoToTouchPoint(Vector3 newTarget)
+    {
+        //Debug.Log("GoToTouchPoint" + newTarget.ToString("F4"));
+        beeState = Constants.TRACK_TOUCH_POINT;
+        target.y -= -0.2f;
+        target = newTarget;
+    }
+
+    public void ReturnToBase()
+    {
+        beeState = Constants.RETURN_TO_BASE;
+        transform.position = Vector3.Lerp(transform.position, BasePosition, 0.1f);
+    }
+
+    public void HoverAtBase()
+    {
+        //Debug.Log("HoverAtBase ");
+        beeState = Constants.HOVER_AT_BASE;
+    }
+
+    public void DoTheThing()
+    {
+        Debug.Log("DoTheThing !!!");
     }
 }
