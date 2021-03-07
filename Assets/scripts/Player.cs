@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private float horizontalInput;
     private Rigidbody rigidBody;
 
-    private float hoverX; 
+    private float hoverX;
     private float hoverY;
     private float hoverV;
 
@@ -22,15 +22,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             //Debug.Log("hello");
             jumpKeyWasPressed = true;
         }
         horizontalInput = Input.GetAxis("Horizontal");
     }
 
-    private void FixedUpdate() {
-        if (jumpKeyWasPressed) {
+    private void FixedUpdate()
+    {
+        if (jumpKeyWasPressed)
+        {
             rigidBody.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
             jumpKeyWasPressed = false;
         }

@@ -110,4 +110,9 @@ public class BeeController : MonoBehaviour
         // Increment the NoiseIndex so that we get a new Noise value next time.
         NoiseIndex += WobbleSpeed * Time.deltaTime;
     }
+
+    public void DoTheThing()
+    {
+        Debug.Log("DoTheThing !!!");
+    }
 }
