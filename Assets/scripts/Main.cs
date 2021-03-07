@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System;
 
 public class Main : MonoBehaviour
 {
@@ -7,31 +7,31 @@ public class Main : MonoBehaviour
 
     void OnEnable()
     {
-        TouchArea.OnTouchAction += DidTouch;
-        TouchArea.OnUnTouchAction += DidUnTouch;
-        TouchArea.OnTouchMoveAction += DidMove;
+        TouchArea.OnTouchStart += DidTouchStart;
+        TouchArea.OnTouchEnd += DidTouchEnd;
+        TouchArea.OnTouchMove += DidTouchMove;
     }
 
     void OnDisable()
     {
-        TouchArea.OnTouchAction -= DidTouch;
-        TouchArea.OnUnTouchAction -= DidUnTouch;
-        TouchArea.OnTouchMoveAction -= DidMove;
+        TouchArea.OnTouchStart -= DidTouchStart;
+        TouchArea.OnTouchEnd -= DidTouchEnd;
+        TouchArea.OnTouchMove -= DidTouchMove;
     }
 
-    void DidTouch()
+    void DidTouchStart()
     {
-        Debug.Log("DidTouch");
         bee.DoTheThing();
     }
 
-    void DidUnTouch()
+    void DidTouchEnd()
     {
-        Debug.Log("DidUnTouch");
+        bee.ReturnToBase();
     }
 
-    void DidMove(Vector3 target)
+    void DidTouchMove(Vector3 target)
     {
-        Debug.Log("DidMove: " + target.ToString("F4"));
+        bee.GoToTouchPoint(target);
+        //Debug.Log("DidTouchMove: " + target.ToString("F4"));
     }
 }

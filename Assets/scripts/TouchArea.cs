@@ -3,12 +3,12 @@ using System.Collections;
 
 public class TouchArea : MonoBehaviour
 {
-    public delegate void TouchAction();
-    public static event TouchAction OnTouchAction;
-    public delegate void UnTouchAction();
-    public static event UnTouchAction OnUnTouchAction;
-    public delegate void TouchMoveAction(Vector3 target);
-    public static event TouchMoveAction OnTouchMoveAction;
+    public delegate void TouchStart();
+    public static event TouchStart OnTouchStart;
+    public delegate void TouchEnd();
+    public static event TouchEnd OnTouchEnd;
+    public delegate void TouchMove(Vector3 target);
+    public static event TouchMove OnTouchMove;
     public Camera cam;
 
     private Vector3 target;
@@ -19,12 +19,12 @@ public class TouchArea : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             touched = true;
-            OnTouchAction();
+            OnTouchStart();
         }
         else if (Input.GetMouseButtonUp(0))
         {
             touched = false;
-            OnUnTouchAction();
+            OnTouchEnd();
         }
 
         if (touched)
@@ -40,9 +40,7 @@ public class TouchArea : MonoBehaviour
                 //target.y -= -0.1f;
             }
 
-            OnTouchMoveAction(target);
+            OnTouchMove(target);
         }
-
-        Debug.Log("target: " + target.ToString("F4"));
     }
 }
